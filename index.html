@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KREDIT LARIS</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-image: url("https://files.catbox.moe/yz0ufb.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center center;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 64, 129, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(255, 64, 129, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 64, 129, 0); }
+        }
+
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+            animation: fadeIn 0.8s ease-out;
+            background-color: rgba(255, 224, 240, 0.7);
+        }
+        .welcome-screen .container {
+            background-color: transparent;
+            padding: 40px;
+            border-radius: 15px;            
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        .welcome-screen h1 {
+            color: #e91e63;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+        .welcome-screen p {
+            color: #6a1b4d;
+            margin-bottom: 30px;
+            animation: fadeIn 1s ease-out 0.4s forwards;
+            opacity: 0;
+        }
+        .welcome-screen .btn {
+            background-color: transparent; /* Fallback background color */
+            background-image: url("https://l.top4top.io/p_34567759h0.png");
+            background-size: cover;
+            background-position: center;
+            color: white;
+            width: 200px; /* Square shape */
+            height: 200px; /* Square shape */
+            padding: 0; /* Remove padding as width/height define size */
+            border: none;
+            border-radius: 0; /* Square shape */
+            cursor: pointer;
+            font-size: 1.5em; /* Larger font for better visibility on square button */
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            animation: fadeIn 1s ease-out 0.6s forwards, pulse 2s infinite; /* Pulsating animation */
+            opacity: 0;
+            overflow: hidden; /* Hide overflowing content if any */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+            font-weight: bold; /* Make text bolder */
+        }
+        .welcome-screen .btn:hover {
+            background-color: #f50057;
+            transform: scale(1.05);
+            animation: none; /* Stop pulsing on hover for better hover effect */
+        }
+
+        .main-content {
+            display: none;
+            padding-top: 80px;
+            animation: fadeIn 0.8s ease-out;
+            min-height: 100vh;
+            background-color: rgba(255, 224, 240, 0.5);
+            padding-bottom: 40px;
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(255, 64, 129, 0.85);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .navbar .brand-name {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-left: auto; /* Center the brand name if no logo */
+            margin-right: auto;
+        }
+        .content {
+            text-align: center;
+            padding: 40px 20px;
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out, height 0.5s ease-out, padding 0.5s ease-out, margin-bottom 0.5s ease-out;
+        }
+        .content.hidden {
+            opacity: 0;
+            transform: translateY(-20px);
+            pointer-events: none;
+            height: 0;
+            padding: 0;
+            margin-bottom: 0;
+            overflow: hidden;
+        }
+        .content h1 {
+            color: #e91e63;
+            margin-bottom: 20px;
+        }
+        .content p {
+            color: #6a1b4d;
+            margin-bottom: 30px;
+        }
+        .button-container {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .btn-action {
+            background-color: #f06292;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.2em;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            min-width: 250px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+        }
+        .btn-action:nth-child(1) {
+            animation: slideInLeft 0.8s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+        .btn-action:nth-child(2) {
+            animation: slideInRight 0.8s ease-out 0.4s forwards;
+            opacity: 0;
+        }
+        .btn-action:nth-child(3) {
+            animation: fadeIn 0.8s ease-out 0.6s forwards;
+            opacity: 0;
+        }
+        .btn-action:hover {
+            background-color: #e91e63;
+            transform: scale(1.03);
+        }
+
+        .form-wrapper {
+            display: none;
+            margin-top: 40px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 20px;
+            box-sizing: border-box;
+            animation: fadeIn 0.8s ease-out;
+            position: relative;
+            z-index: 50; /* Higher z-index for the form wrapper */
+        }
+
+        .form-message {
+            background-color: transparent;
+            border: 1px solid rgba(255, 128, 171, 0.8);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            color: #6a1b4d;
+            text-align: left;
+            font-size: 0.95em;
+            line-height: 1.5;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+        }
+        .form-message ul {
+            margin-top: 10px;
+            margin-bottom: 0;
+            padding-left: 20px;
+        }
+        .form-message ul li {
+            margin-bottom: 5px;
+        }
+        .form-message .bunga-info {
+            font-weight: bold;
+            color: #e91e63;
+        }
+
+        .form-container {
+            background-image: url(https://files.catbox.moe/evb4zo.jpg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            text-align: left;
+            border: 1px solid rgba(255, 179, 217, 0.8);
+        }
+        .form-container h2 {
+            text-align: center;
+            color: #e91e63;
+            margin-bottom: 25px;
+            border-radius: 15px;
+            background-image: url(https://files.catbox.moe/9h2eio.jpg);
+        }
+        .form-step {
+            display: none; /* Hide all steps by default */
+        }
+        .form-step.active {
+            display: block; /* Show active step */
+            animation: fadeIn 0.5s ease-out; /* Smooth transition for steps */
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #6a1b4d;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="tel"],
+        .form-group input[type="email"],
+        .form-group select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid rgba(255, 179, 217, 0.8);
+            border-radius: 8px;
+            font-size: 1em;
+            box-sizing: border-box;
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #ff4081;
+            outline: none;
+            box-shadow: 0 0 5px rgba(255, 64, 129, 0.4);
+        }
+        .form-group input::placeholder {
+            color: #f48fb1;
+        }
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            gap: 10px; /* Jarak antar tombol */
+        }
+        /* Adjusted styles for form buttons */
+        .form-navigation button,
+        .form-group input.submit-btn {
+            background-color: #ff4081;
+            color: white;
+            padding: 10px 15px; /* Reduced padding */
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9em; /* Reduced font size */
+            flex: 1;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            position: relative; /* Wajib untuk z-index */
+            z-index: 100; /* Tingkatkan z-index untuk tombol, terutama di summary */
+        }
+        .form-navigation button.prev-btn {
+            background-color: #f06292;
+        }
+        .form-navigation button:hover,
+        .form-group input.submit-btn:hover {
+            background-color: #f50057;
+            transform: scale(1.02);
+        }
+        .form-navigation button.prev-btn:hover {
+            background-color: #e91e63;
+        }
+        .form-group input.submit-btn {
+            width: 100%;
+            margin-top: 20px;
+        }
+        .info-bunga {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: rgba(255, 235, 242, 0.8);
+            border: 1px solid rgba(255, 128, 171, 0.8);
+            border-radius: 8px;
+            color: #e91e63;
+            font-weight: bold;
+            text-align: center;
+        }
+        .info-bunga p {
+            margin: 5px 0;
+        }
+
+        .realtime-gold-price {
+            font-size: 0.9em;
+            color: #6a1b4d;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .realtime-gold-price span {
+            color: #e91e63;
+            font-size: 1.1em;
+        }
+
+        #musicControl {
+            position: fixed;
+            bottom: 20px; 
+            right: 20px;
+            background-color: rgba(255, 64, 129, 0.85);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5em;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            z-index: 1001;
+            display: none;
+        }
+        #musicControl:hover {
+            background-color: #f50057;
+            transform: scale(1.05);
+        }
+
+        .summary-content {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            text-align: left;
+            position: relative; 
+            z-index: 60; /* Z-index sangat tinggi untuk summary content */
+        }
+        .summary-content h3 {
+            color: #e91e63;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .summary-content p {
+            margin-bottom: 8px;
+            font-size: 1em;
+            color: #4a142c;
+        }
+        .summary-content p strong {
+            color: #e91e63;
+        }
+    </style>
+</head>
+<body>
+    <audio id="backgroundMusic" loop>
+        <source src="https://files.catbox.moe/vqjtao.mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung elemen audio.
+    </audio>
+
+    <div id="welcomeScreen" class="welcome-screen">
+        <div class="container">            
+            <button class="btn" onclick="showMainContent()"></button>
+        </div>
+    </div>
+
+    <div id="mainContent" class="main-content">
+        <div class="navbar">
+            <span class="brand-name">KREDIT LARIS</span>
+        </div>
+
+       <button id="musicControl" onclick="toggleMusic()">🎵</button> 
+
+        <div id="mainContentArea" class="content">
+            <h1>Selamat Datang di KREDIT LARIS!</h1>
+            <p>Pilih layanan yang kamu butuhkan ya:</p>
+
+            <div class="button-container">
+                <button class="btn-action" onclick="showForm('pinjamanTunai')">🌸 Pinjaman Tunai 🌸</button>
+                <button class="btn-action" onclick="showForm('kreditHP')">📱 Kredit Elektronik 💖</button>
+                <button class="btn-action" onclick="showForm('kreditEmas')">⭐ Kredit Emas 💰</button>
+            </div>
+        </div>
+
+        <div id="pinjamanTunaiWrapper" class="form-wrapper">
+            <div class="form-message">
+                <p><strong>Isi formulir di bawah ini, tapi baca dulu ya ketentuan dari kami:</strong></p>
+                <ul>
+                    <li>Usia minimal 21 tahun, maksimal 55 tahun.</li>
+                    <li>Wajib memiliki E-KTP.</li>
+                    <li>Diutamakan berdomisili di area layanan kami.</li>
+                    <li>Dana cair dalam 1-2 hari kerja setelah persetujuan.</li>
+                    <li>Tenor fleksibel sesuai kemampuan pembayaran Anda.</li>
+                    <li><span class="bunga-info">Bunga: Tenor 1 bulan hanya 20%</span> dari total pinjaman.</li>
+                    <li><span class="bunga-info">Bunga: Tenor 3 bulan dan seterusnya 40%</span> dari total pinjaman.</li>
+                </ul>
+                <p>Kami merekomendasikan untuk mengisi data dengan jujur dan lengkap agar proses pengajuan lancar.</p>
+            </div>
+            <div id="pinjamanTunaiForm" class="form-container">
+                <h2>Formulir Pinjaman Tunai</h2>
+                <form id="formTunai">
+                    <div class="form-step active" data-step="1">
+                        <div class="form-group">
+                            <label for="namaLengkapTunai">Nama Lengkap:</label>
+                            <input type="text" id="namaLengkapTunai" name="nama_lengkap" placeholder="Nama sesuai KTP" required>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" onclick="nextStep('formTunai', 1)">Selanjutnya</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="2">
+                        <div class="form-group">
+                            <label for="nikKTPTunai">NIK KTP:</label>
+                            <input type="text" id="nikKTPTunai" name="nik_ktp" pattern="[0-9]{16}" placeholder="16 digit NIK KTP" title="NIK harus 16 digit angka" required>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="prev-btn" onclick="prevStep('formTunai', 2)">Sebelumnya</button>
+                            <button type="button" onclick="nextStep('formTunai', 2)">Selanjutnya</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="3">
+                        <div class="form-group">
+                            <label for="noPonselPribadiTunai">Nomor Ponsel Pribadi:</label>
+                            <input type="tel" id="noPonselPribadiTunai" name="no_ponsel_pribadi" pattern="[0-9]+" placeholder="Contoh: 081234567890" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="referensiTunai">Referensi (Opsional):</label>
+                            <input type="text" id="referensiTunai" name="referensi" placeholder="Nama atau Kode Referensi">
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="prev-btn" onclick="prevStep('formTunai', 3)">Sebelumnya</button>
+                            <button type="button" onclick="nextStep('formTunai', 3)">Selanjutnya</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="4">
+                        <div class="form-group">
+                            <label for="tenorTunai">Tenor (Berapa bulan?):</label>
+                            <select id="tenorTunai" name="tenor" onchange="hitungBunga('tunai')" required>
+                                <option value="">Pilih Tenor</option>
+                                <option value="1">1 bulan</option>
+                                <option value="3">3 bulan</option>
+                                <option value="5">5 bulan</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="jumlahPinjamTunai">Pinjam Berapa Rupiah?:</label>
+                            <input type="text" id="jumlahPinjamTunai" name="jumlah_pinjam" placeholder="Contoh: 5.000.000" oninput="formatRupiah(this); hitungBunga('tunai')" required>
+                        </div>
+                        <div id="infoBungaTunai" class="info-bunga" style="display:none;">
+                            <p>Bunga yang berlaku: <span id="bungaPersenTunai"></span>.</p>
+                            <p>Total pengembalian: <span id="totalPengembalianTunai"></span></p>
+                            <p>Cicilan per bulan: <span id="cicilanPerBulanTunai"></span></p>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="prev-btn" onclick="prevStep('formTunai', 4)">Sebelumnya</button>
+                            <button type="button" onclick="showSummary('tunai')">Tinjau & Ajukan</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="summary">
+                        <h3>Ringkasan Pengajuan Pinjaman Tunai</h3>
+                        <div class="summary-content">
+                            <p>Nama Lengkap: <strong><span id="summaryNamaLengkapTunai"></span></strong></p>
+                            <p>NIK KTP: <strong><span id="summaryNikKTPTunai"></span></strong></p>
+                            <p>Nomor Ponsel: <strong><span id="summaryNoPonselPribadiTunai"></span></strong></p>
+                            <p>Referensi: <strong><span id="summaryReferensiTunai"></span></strong></p>
+                            <p>Tenor: <strong><span id="summaryTenorTunai"></span> bulan</strong></p>
+                            <p>Jumlah Pinjaman: <strong><span id="summaryJumlahPinjamTunai"></span></strong></p>
+                            <p>Bunga: <strong><span id="summaryBungaPersenTunai"></span></strong></p>
+                            <p>Total Pengembalian: <strong><span id="summaryTotalPengembalianTunai"></span></strong></p>
+                            <p>Cicilan Per Bulan: <strong><span id="summaryCicilanPerBulanTunai"></span></strong></p>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="prev-btn" onclick="prevStep('formTunai', 'summary')">Edit</button>
+                            <button type="button" onclick="kirimKeWhatsApp('tunai')" style="z-index: 1000;">Ajukan Sekarang</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="kreditHPWrapper" class="form-wrapper">
+            <div class="form-message">
+                <p><strong>Isi formulir di bawah ini, tapi baca dulu ya ketentuan dari kami:</strong></p>
+                <ul>
+                    <li>Usia minimal 21 tahun, maksimal 55 tahun.</li>
+                    <li>Wajib memiliki E-KTP.</li>
+                    <li>Diutamakan berdomisili di area layanan kami.</li>
+                    <li>Proses persetujuan cepat (1-2 hari kerja).</li>
+                    <li>Pilih barang elektronik sesuai kebutuhan dan kemampuan.</li>
+                    <li><span class="bunga-info">Bunga: Tenor 1 bulan hanya 20%</span> dari harga barang.</li>
+                    <li><span class="bunga-info">Bunga: Tenor 3 bulan dan seterusnya 40%</span> dari harga barang.</li>
+                </ul>
+                <p>Kami merekomendasikan untuk mengisi data dengan jujur dan lengkap agar proses pengajuan lancar.</p>
+            </div>
+            <div id="kreditHPForm" class="form-container">
+                <h2>Formulir Kredit Elektronik</h2>
+                <form id="formKredit">
+                    <div class="form-step active" data-step="1">
+                        <div class="form-group">
+                            <label for="namaLengkapKredit">Nama Lengkap:</label>
+                            <input type="text" id="namaLengkapKredit" name="nama_lengkap" placeholder="Nama sesuai KTP" required>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" onclick="nextStep('formKredit', 1)">Selanjutnya</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="2">
+                        <div class="form-group">
+                            <label for="nikKTPKredit">NIK KTP:</label>
+                            <input type="text" id="nikKTPKredit" name="nik_ktp" pattern="[0-9]{16}" placeholder="16 digit NIK KTP" title="NIK harus 16 digit angka" required>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="prev-btn" onclick="prevStep('formKredit', 2)">Sebelumnya</button>
+                            <button type="button" onclick="nextStep('formKredit', 2)">Selanjutnya</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="3">
+                        <div class="form-group">
+                            <label for="noPonselPribadiKredit">Nomor Ponsel Pribadi:</label>
+                            <input type="tel" id="noPonselPribadiKredit" name="no_ponsel_pribadi" pattern="[0-9]+" placeholder="Contoh: 081234567890" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="referensiKredit">Referensi (Opsional):</label>
+                            <input type="text" id="referensiKredit" name="referensi" placeholder="Nama atau Kode Referensi">
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="prev-btn" onclick="prevStep('formKredit', 3)">Sebelumnya</button>
+                            <button type="button" onclick="nextStep('formKredit', 3)">Selanjutnya</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="4">
+                        <div class="form-group">
+                            <label for="tenorKredit">Tenor (Berapa bulan?):</label>
+                            <select id="tenorKredit" name="tenor" onchange="hitungBunga('kredit')" required>
+                                <option value="">Pilih Tenor</option>
+                                <option value="1">1 bulan</option>
+                                <option value="3">3 bulan</option>
+                                <option value="5">5 bulan</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="kategoriElektronik">Kategori Elektronik:</label>
+                            <select id="kategoriElektronik" name="kategori_elektronik" required>
+                                <option value="">Pilih Kategori</option>
+                                <option value="HP">Handphone (HP)</option>
+                                <option value="Laptop">Laptop</option>
+                                <option value="TV">Televisi (TV)</option>
+                                <option value="Kulkas">Kulkas</option>
+                                <option value="Mesin Cuci">Mesin Cuci</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="hargaBarangKredit">Harga Barang Elektronik (Rp):</label>
+                            <input type="text" id="hargaBarangKredit" name="harga_barang" placeholder="Contoh: 7.500.000" oninput="formatRupiah(this); hitungBunga('kredit')" required>
+                        </div>
+                        <div id="infoBungaKredit" class="info-bunga" style="display:none;">
+                            <p>Bunga yang berlaku: <span id="bungaPersenKredit"></span>.</p>
+                            <p>Total pengembalian: <span id="totalPengembalianKredit"></span></p>
+                            <p>Cicilan per bulan: <span id="cicilanPerBulanKredit"></span></p>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="prev-btn" onclick="prevStep('formKredit', 4)">Sebelumnya</button>
+                            <button type="button" onclick="showSummary('kredit')">Tinjau & Ajukan</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="summary">
+                        <h3>Ringkasan Pengajuan Kredit Elektronik</h3>
+                        <div class="summary-content">
+                            <p>Nama Lengkap: <strong><span id="summaryNamaLengkapKredit"></span></strong></p>
+                            <p>NIK KTP: <strong><span id="summaryNikKTPKredit"></span></strong></p>
+                            <p>Nomor Ponsel: <strong><span id="summaryNoPonselPribadiKredit"></span></strong></p>
+                            <p>Referensi: <strong><span id="summaryReferensiKredit"></span></strong></p>
+                            <p>Tenor: <strong><span id="summaryTenorKredit"></span> bulan</strong></p>
+                            <p>Kategori Barang: <strong><span id="summaryKategoriElektronik"></span></strong></p>
+                            <p>Harga Barang: <strong><span id="summaryHargaBarangKredit"></span></strong></p>
+                            <p>Bunga: <strong><span id="summaryBungaPersenKredit"></span></strong></p>
+                            <p>Total Pengembalian: <strong><span id="summaryTotalPengembalianKredit"></span></strong></p>
+                            <p>Cicilan Per Bulan: <strong><span id="summaryCicilanPerBulanKredit"></span></strong></p>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="prev-btn" onclick="prevStep('formKredit', 'summary')">Edit</button>
+                            <button type="button" onclick="kirimKeWhatsApp('kredit')" style="z-index: 1000;">Ajukan Sekarang</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="kreditEmasWrapper" class="form-wrapper">
+            <div class="form-message">
+                <p><strong>Isi formulir di bawah ini, tapi baca dulu ya ketentuan dari kami:</strong></p>
+                <ul>
+                    <li>Usia minimal 21 tahun, maksimal 55 tahun.</li>
+                    <li>Wajib memiliki E-KTP.</li>
+                    <li>Diutamakan berdomisili di area layanan kami.</li>
+                    <li>Emas yang diajukan harus milik sendiri dan dilengkapi surat sah.</li>
+                    <li>Proses persetujuan cepat (1-2 hari kerja).</li>
+                    <li><span class="bunga-info">Bunga: Tenor 1 bulan hanya 20%</span> dari total nilai emas.</li>
+                    <li><span class="bunga-info">Bunga: Tenor 3 bulan dan seterusnya 40%</span> dari total nilai emas.</li>
+                </ul>
+                <p>Kami merekomendasikan untuk mengisi data dengan jujur dan lengkap agar proses pengajuan lancar.</p>
+            </div>
+            <div id="kreditEmasForm" class="form-container">
+                <h2>Formulir Kredit Emas</h2>
+                <form id="formEmas">
+                    <div class="form-step active" data-step="1">
+                        <div class="form-group">
+                            <label for="namaLengkapEmas">Nama Lengkap:</label>
+                            <input type="text" id="namaLengkapEmas" name="nama_lengkap" placeholder="Nama sesuai KTP" required>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" onclick="nextStep('formEmas', 1)">Selanjutnya</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="2">
+                        <div class="form-group">
+                            <label for="nikKTPEmas">NIK KTP:</label>
+                            <input type="text" id="nikKTPEmas" name="nik_ktp" pattern="[0-9]{16}" placeholder="16 digit NIK KTP" title="NIK harus 16 digit angka" required>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="prev-btn" onclick="prevStep('formEmas', 2)">Sebelumnya</button>
+                            <button type="button" onclick="nextStep('formEmas', 2)">Selanjutnya</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="3">
+                        <div class="form-group">
+                            <label for="noPonselPribadiEmas">Nomor Ponsel Pribadi:</label>
+                            <input type="tel" id="noPonselPribadiEmas" name="no_ponsel_pribadi" pattern="[0-9]+" placeholder="Contoh: 081234567890" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="referensiEmas">Referensi (Opsional):</label>
+                            <input type="text" id="referensiEmas" name="referensi" placeholder="Nama atau Kode Referensi">
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="prev-btn" onclick="prevStep('formEmas', 3)">Sebelumnya</button>
+                            <button type="button" onclick="nextStep('formEmas', 3)">Selanjutnya</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="4">
+                        <div class="form-group">
+                            <label for="tenorEmas">Tenor (Berapa bulan?):</label>
+                            <select id="tenorEmas" name="tenor" onchange="hitungBunga('emas')" required>
+                                <option value="">Pilih Tenor</option>
+                                <option value="1">1 bulan</option>
+                                <option value="3">3 bulan</option>
+                                <option value="5">5 bulan</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="jumlahGramEmas">Jumlah Emas (Gram):</label>
+                            <input type="number" id="jumlahGramEmas" name="jumlah_gram" placeholder="Contoh: 5" min="0.1" step="0.1" oninput="hitungBunga('emas')" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="hargaEmasPerGram">Harga Emas per Gram (Rp):</label>
+                            <input type="text" id="hargaEmasPerGram" name="harga_per_gram" placeholder="Contoh: 1.200.000 (Otomatis terisi)" oninput="formatRupiah(this); hitungBunga('emas')" required>
+                            <div id="realtimeGoldPrice" class="realtime-gold-price" style="display:none;">
+                                Harga Emas (Treasury) Terkini: <span id="goldPriceValue">Memuat...</span>
+                            </div>
+                        </div>
+                        <div id="infoBungaEmas" class="info-bunga" style="display:none;">
+                            <p>Total nilai emas: <span id="totalNilaiEmas"></span></p>
+                            <p>Bunga yang berlaku: <span id="bungaPersenEmas"></span>.</p>
+                            <p>Total pengembalian: <span id="totalPengembalianEmas"></span></p>
+                            <p>Cicilan per bulan: <span id="cicilanPerBulanEmas"></span></p>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="prev-btn" onclick="prevStep('formEmas', 4)">Sebelumnya</button>
+                            <button type="button" onclick="showSummary('emas')">Tinjau & Ajukan</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="summary">
+                        <h3>Ringkasan Pengajuan Kredit Emas</h3>
+                        <div class="summary-content">
+                            <p>Nama Lengkap: <strong><span id="summaryNamaLengkapEmas"></span></strong></p>
+                            <p>NIK KTP: <strong><span id="summaryNikKTPEmas"></span></strong></p>
+                            <p>Nomor Ponsel: <strong><span id="summaryNoPonselPribadiEmas"></span></strong></p>
+                            <p>Referensi: <strong><span id="summaryReferensiEmas"></span></strong></p>
+                            <p>Tenor: <strong><span id="summaryTenorEmas"></span> bulan</strong></p>
+                            <p>Jumlah Gram Emas: <strong><span id="summaryJumlahGramEmas"></span> gram</strong></p>
+                            <p>Harga Emas per Gram: <strong><span id="summaryHargaEmasPerGram"></span></strong></p>
+                            <p>Total Nilai Emas: <strong><span id="summaryTotalNilaiEmas"></span></strong></p>
+                            <p>Bunga: <strong><span id="summaryBungaPersenEmas"></span></strong></p>
+                            <p>Total Pengembalian: <strong><span id="summaryTotalPengembalianEmas"></span></strong></p>
+                            <p>Cicilan Per Bulan: <strong><span id="summaryCicilanPerBulanEmas"></span></strong></p>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="prev-btn" onclick="prevStep('formEmas', 'summary')">Edit</button>
+                            <button type="button" onclick="kirimKeWhatsApp('emas')" style="z-index: 1000;">Ajukan Sekarang</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const musicControlBtn = document.getElementById('musicControl');
+        let isPlaying = false; 
+
+        function showMainContent() {
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+            musicControlBtn.style.display = 'flex'; 
+            playMusic(); 
+            animateMainButtons();
+        }
+
+        function playMusic() {
+            if (backgroundMusic.paused) {
+                backgroundMusic.play().then(() => {
+                    isPlaying = true;
+                    musicControlBtn.textContent = '⏸️'; 
+                }).catch(error => {
+                    console.error("Autoplay prevented:", error);
+                    musicControlBtn.textContent = '▶️'; 
+                    isPlaying = false;
+                });
+            }
+        }
+
+        function pauseMusic() {
+            if (!backgroundMusic.paused) {
+                backgroundMusic.pause();
+                isPlaying = false;
+                musicControlBtn.textContent = '▶️'; 
+            }
+        }
+
+        function toggleMusic() {
+            if (isPlaying) {
+                pauseMusic();
+            } else {
+                playMusic();
+            }
+        }
+
+        function animateMainButtons() {
+            const buttons = document.querySelectorAll('#mainContentArea .btn-action'); 
+            buttons.forEach((button, index) => {
+                button.style.opacity = 0;
+                button.style.animation = ''; 
+                setTimeout(() => {
+                    if (index === 0) {
+                        button.style.animation = 'slideInLeft 0.8s ease-out 0.2s forwards';
+                    } else if (index === 1) {
+                        button.style.animation = 'slideInRight 0.8s ease-out 0.4s forwards';
+                    } else if (index === 2) {
+                        button.style.animation = 'fadeIn 0.8s ease-out 0.6s forwards';
+                    }
+                }, 50);
+            });
+        }
+
+        async function showForm(formId) {
+            const mainContentArea = document.getElementById('mainContentArea');
+            mainContentArea.classList.add('hidden');
+
+            document.getElementById('pinjamanTunaiWrapper').style.display = 'none';
+            document.getElementById('kreditHPWrapper').style.display = 'none';
+            document.getElementById('kreditEmasWrapper').style.display = 'none';
+
+            const targetWrapper = document.getElementById(formId + 'Wrapper');
+            setTimeout(async () => {
+                targetWrapper.style.display = 'block';
+
+                resetFormSteps(formId);
+
+                if (formId === 'kreditEmas') {
+                    await fetchGoldPrice();
+                }
+            }, 500);
+
+            document.getElementById('infoBungaTunai').style.display = 'none';
+            document.getElementById('infoBungaKredit').style.display = 'none';
+            document.getElementById('infoBungaEmas').style.display = 'none';
+        }
+
+        // --- Step-by-Step Form Logic ---
+        function resetFormSteps(formId) {
+            const formElement = document.getElementById(formId + 'Form');
+            const steps = formElement.querySelectorAll('.form-step');
+            steps.forEach((step, index) => {
+                step.classList.remove('active');
+                if (index === 0) {
+                    step.classList.add('active'); 
+                }
+            });
+            document.getElementById('infoBungaTunai').style.display = 'none';
+            document.getElementById('infoBungaKredit').style.display = 'none';
+            document.getElementById('infoBungaEmas').style.display = 'none';
+        }
+
+        function nextStep(formId, currentStepNumber) {
+            const formElement = document.getElementById(formId);
+            const currentStep = formElement.querySelector(`.form-step[data-step="${currentStepNumber}"]`);
+            
+            const requiredInputs = currentStep.querySelectorAll('[required]');
+            let allValid = true;
+            requiredInputs.forEach(input => {
+                if (!input.value.trim()) {
+                    allValid = false;
+                    input.reportValidity(); 
+                } else if (input.type === 'tel' && input.pattern && !new RegExp(input.pattern).test(input.value)) {
+                    allValid = false;
+                    input.reportValidity();
+                } else if (input.type === 'text' && input.id.includes('NIK') && input.value.length !== 16) {
+                    allValid = false;
+                    input.reportValidity();
+                } else if (input.tagName === 'SELECT' && input.value === '') {
+                    allValid = false;
+                    input.reportValidity();
+                }
+            });
+
+            if (!allValid) {
+                alert('Mohon lengkapi data yang wajib diisi dengan benar.');
+                return;
+            }
+
+            currentStep.classList.remove('active');
+            let nextStepElement;
+            if (currentStepNumber === 'summary') {
+                const steps = Array.from(formElement.querySelectorAll('.form-step:not([data-step="summary"])'));
+                nextStepElement = steps[steps.length - 1]; 
+            } else {
+                nextStepElement = formElement.querySelector(`.form-step[data-step="${currentStepNumber + 1}"]`);
+            }
+            
+            if (nextStepElement) {
+                nextStepElement.classList.add('active');
+            } else {
+                console.warn("No next step found or missing summary call.");
+            }
+        }
+
+        function prevStep(formId, currentStepNumber) {
+            const formElement = document.getElementById(formId);
+            const currentStep = formElement.querySelector(`.form-step[data-step="${currentStepNumber}"]`);
+            currentStep.classList.remove('active');
+
+            let prevStepElement;
+            if (currentStepNumber === 'summary') {
+                const steps = Array.from(formElement.querySelectorAll('.form-step:not([data-step="summary"])'));
+                prevStepElement = steps[steps.length - 1];
+            } else {
+                prevStepElement = formElement.querySelector(`.form-step[data-step="${currentStepNumber - 1}"]`);
+            }
+
+            if (prevStepElement) {
+                prevStepElement.classList.add('active');
+                if (currentStepNumber === 4) { 
+                    document.getElementById(`infoBunga${formId.substring(4)}`).style.display = 'none';
+                }
+            } else {
+                console.warn("No previous step found. This should be handled by not showing 'Previous' button on first step.");
+            }
+        }
+
+        function showSummary(formType) {
+            const formId = `form${formType.charAt(0).toUpperCase() + formType.slice(1)}`; 
+            const formElement = document.getElementById(formId);
+            const currentStep = formElement.querySelector(`.form-step.active`);
+
+            const requiredInputs = currentStep.querySelectorAll('[required]');
+            let allValid = true;
+            requiredInputs.forEach(input => {
+                if (!input.value.trim()) {
+                    allValid = false;
+                    input.reportValidity();
+                } else if (input.type === 'tel' && input.pattern && !new RegExp(input.pattern).test(input.value)) {
+                    allValid = false;
+                    input.reportValidity();
+                } else if (input.type === 'text' && input.id.includes('NIK') && input.value.length !== 16) {
+                    allValid = false;
+                    input.reportValidity();
+                } else if (input.tagName === 'SELECT' && input.value === '') {
+                    allValid = false;
+                    input.reportValidity();
+                }
+            });
+
+            if (!allValid) {
+                alert('Mohon lengkapi data yang wajib diisi dengan benar sebelum melanjutkan ke ringkasan.');
+                return;
+            }
+
+            currentStep.classList.remove('active');
+
+            // Populate summary
+            if (formType === 'tunai') {
+                document.getElementById('summaryNamaLengkapTunai').textContent = document.getElementById('namaLengkapTunai').value;
+                document.getElementById('summaryNikKTPTunai').textContent = document.getElementById('nikKTPTunai').value;
+                document.getElementById('summaryNoPonselPribadiTunai').textContent = document.getElementById('noPonselPribadiTunai').value;
+                document.getElementById('summaryReferensiTunai').textContent = document.getElementById('referensiTunai').value || '-';
+                document.getElementById('summaryTenorTunai').textContent = document.getElementById('tenorTunai').value;
+                document.getElementById('summaryJumlahPinjamTunai').textContent = document.getElementById('jumlahPinjamTunai').value;
+                document.getElementById('summaryBungaPersenTunai').textContent = document.getElementById('bungaPersenTunai').textContent;
+                document.getElementById('summaryTotalPengembalianTunai').textContent = document.getElementById('totalPengembalianTunai').textContent;
+                document.getElementById('summaryCicilanPerBulanTunai').textContent = document.getElementById('cicilanPerBulanTunai').textContent;
+            } else if (formType === 'kredit') {
+                document.getElementById('summaryNamaLengkapKredit').textContent = document.getElementById('namaLengkapKredit').value;
+                document.getElementById('summaryNikKTPKredit').textContent = document.getElementById('nikKTPKredit').value;
+                document.getElementById('summaryNoPonselPribadiKredit').textContent = document.getElementById('noPonselPribadiKredit').value;
+                document.getElementById('summaryReferensiKredit').textContent = document.getElementById('referensiKredit').value || '-';
+                document.getElementById('summaryTenorKredit').textContent = document.getElementById('tenorKredit').value;
+                document.getElementById('summaryKategoriElektronik').textContent = document.getElementById('kategoriElektronik').value;
+                document.getElementById('summaryHargaBarangKredit').textContent = document.getElementById('hargaBarangKredit').value;
+                document.getElementById('summaryBungaPersenKredit').textContent = document.getElementById('bungaPersenKredit').textContent;
+                document.getElementById('summaryTotalPengembalianKredit').textContent = document.getElementById('totalPengembalianKredit').textContent;
+                document.getElementById('summaryCicilanPerBulanKredit').textContent = document.getElementById('cicilanPerBulanKredit').textContent;
+            } else if (formType === 'emas') {
+                document.getElementById('summaryNamaLengkapEmas').textContent = document.getElementById('namaLengkapEmas').value;
+                document.getElementById('summaryNikKTPEmas').textContent = document.getElementById('nikKTPEmas').value;
+                document.getElementById('summaryNoPonselPribadiEmas').textContent = document.getElementById('noPonselPribadiEmas').value;
+                document.getElementById('summaryReferensiEmas').textContent = document.getElementById('referensiEmas').value || '-';
+                document.getElementById('summaryTenorEmas').textContent = document.getElementById('tenorEmas').value;
+                document.getElementById('summaryJumlahGramEmas').textContent = document.getElementById('jumlahGramEmas').value;
+                document.getElementById('summaryHargaEmasPerGram').textContent = document.getElementById('hargaEmasPerGram').value; // Ini sudah diformat
+                
+                // Ambil nilai yang sudah dihitung dan diformat dari span infoBunga
+                totalNilaiEmas = document.getElementById('totalNilaiEmas').textContent;
+                bungaPersen = document.getElementById('bungaPersenEmas').textContent;
+                totalPengembalian = document.getElementById('totalPengembalianEmas').textContent;
+                cicilanPerBulan = document.getElementById('cicilanPerBulanEmas').textContent;
+                
+                document.getElementById('summaryTotalNilaiEmas').textContent = totalNilaiEmas;
+                document.getElementById('summaryBungaPersenEmas').textContent = bungaPersen;
+                document.getElementById('summaryTotalPengembalianEmas').textContent = totalPengembalian;
+                document.getElementById('summaryCicilanPerBulanEmas').textContent = cicilanPerBulan;
+            }
+
+            formElement.querySelector(`.form-step[data-step="summary"]`).classList.add('active');
+        }
+
+        function formatRupiah(input) {
+            let value = input.value.replace(/[^0-9]/g, '');
+            if (value) {
+                input.value = new Intl.NumberFormat('id-ID').format(Number(value));
+            } else {
+                input.value = '';
+            }
+        }
+
+        async function fetchGoldPrice() {
+            const goldPriceValueSpan = document.getElementById('goldPriceValue');
+            const realtimeGoldPriceDiv = document.getElementById('realtimeGoldPrice');
+            const hargaEmasPerGramInput = document.getElementById('hargaEmasPerGram');
+
+            realtimeGoldPriceDiv.style.display = 'block';
+            goldPriceValueSpan.textContent = 'Memuat...';
+            hargaEmasPerGramInput.value = '';
+
+            try {
+                const response = await fetch('https://api.digimart.id/gold-prices');
+                const data = await response.json();
+
+                let goldPrice = null;
+                const treasuryGold = data.find(item => item.source === 'Treasury');
+                const antamGold = data.find(item => item.source === 'Antam');
+
+                if (treasuryGold && treasuryGold.buy_price) {
+                    goldPrice = treasuryGold.buy_price;
+                    goldPriceValueSpan.textContent = `Rp ${new Intl.NumberFormat('id-ID').format(goldPrice)}`;
+                    hargaEmasPerGramInput.value = new Intl.NumberFormat('id-ID').format(goldPrice);
+                } else if (antamGold && antamGold.buy_price) {
+                     goldPrice = antamGold.buy_price;
+                     goldPriceValueSpan.textContent = `Rp ${new Intl.NumberFormat('id-ID').format(goldPrice)} (Antam)`;
+                     hargaEmasPerGramInput.value = new Intl.NumberFormat('id-ID').format(goldPrice);
+                } else {
+                    goldPriceValueSpan.textContent = 'Data tidak ditemukan.';
+                    hargaEmasPerGramInput.value = '';
+                }
+                
+                hitungBunga('emas');
+
+            } catch (error) {
+                console.error('Error fetching gold price:', error);
+                goldPriceValueSpan.textContent = 'Gagal memuat harga. Silakan masukkan manual.';
+                hargaEmasPerGramInput.placeholder = 'Contoh: 1.200.000 (Masukkan Manual)';
+            }
+        }
+
+        function hitungBunga(formType) {
+            let tenorInput, bungaPersenSpan, totalPengembalianSpan, cicilanPerBulanSpan, infoBungaDiv;
+            let principalAmount = 0;
+
+            if (formType === 'tunai') {
+                tenorInput = document.getElementById('tenorTunai');
+                // Pastikan nilai sudah bersih dari format rupiah sebelum parseInt
+                principalAmount = parseInt(document.getElementById('jumlahPinjamTunai').value.replace(/\./g, ''));
+                bungaPersenSpan = document.getElementById('bungaPersenTunai');
+                totalPengembalianSpan = document.getElementById('totalPengembalianTunai');
+                cicilanPerBulanSpan = document.getElementById('cicilanPerBulanTunai');
+                infoBungaDiv = document.getElementById('infoBungaTunai');
+
+            } else if (formType === 'kredit') {
+                tenorInput = document.getElementById('tenorKredit');
+                // Pastikan nilai sudah bersih dari format rupiah sebelum parseInt
+                principalAmount = parseInt(document.getElementById('hargaBarangKredit').value.replace(/\./g, ''));
+                bungaPersenSpan = document.getElementById('bungaPersenKredit');
+                totalPengembalianSpan = document.getElementById('totalPengembalianKredit');
+                cicilanPerBulanSpan = document.getElementById('cicilanPerBulanKredit');
+                infoBungaDiv = document.getElementById('infoBungaKredit');
+            } else if (formType === 'emas') {
+                tenorInput = document.getElementById('tenorEmas');
+                const jumlahGramEmas = parseFloat(document.getElementById('jumlahGramEmas').value);
+                const hargaEmasPerGramField = document.getElementById('hargaEmasPerGram');
+                // Pastikan nilai sudah bersih dari format rupiah sebelum parseInt
+                const hargaEmasPerGram = parseInt(hargaEmasPerGramField.value.replace(/\./g, ''));
+
+                bungaPersenSpan = document.getElementById('bungaPersenEmas');
+                totalPengembalianSpan = document.getElementById('totalPengembalianEmas');
+                cicilanPerBulanSpan = document.getElementById('cicilanPerBulanEmas');
+                infoBungaDiv = document.getElementById('infoBungaEmas');
+                const totalNilaiEmasSpan = document.getElementById('totalNilaiEmas');
+
+                if (isNaN(jumlahGramEmas) || isNaN(hargaEmasPerGram) || jumlahGramEmas <= 0 || hargaEmasPerGram <= 0) {
+                    infoBungaDiv.style.display = 'none';
+                    return;
+                }
+                principalAmount = jumlahGramEmas * hargaEmasPerGram;
+                totalNilaiEmasSpan.textContent = principalAmount.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            }
+
+            const tenor = parseInt(tenorInput.value);
+
+            if (isNaN(tenor) || isNaN(principalAmount) || tenor === 0 || principalAmount === 0) {
+                infoBungaDiv.style.display = 'none';
+                return;
+            }
+
+            let bungaRate;
+            if (tenor === 1) {
+                bungaRate = 0.20; 
+            } else {
+                bungaRate = 0.40; 
+            }
+
+            const interestAmount = principalAmount * bungaRate;
+            const totalRepayment = principalAmount + interestAmount;
+            const monthlyInstallment = totalRepayment / tenor;
+
+            bungaPersenSpan.textContent = (bungaRate * 100) + '%';
+            totalPengembalianSpan.textContent = totalRepayment.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            cicilanPerBulanSpan.textContent = monthlyInstallment.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            infoBungaDiv.style.display = 'block';
+        }
+
+        function kirimKeWhatsApp(formType) {
+            let namaLengkap, nikKTP, noPonselPribadi, tenor, tipeTransaksi, bungaPersen, totalPengembalian, cicilanPerBulan, kategoriElektronik, jumlahGramEmas, hargaEmasPerGram, totalNilaiEmas, referensi;
+
+            // Dapatkan nilai dari elemen input langsung
+            if (formType === 'tunai') {
+                tipeTransaksi = "Pinjaman Tunai";
+                namaLengkap = document.getElementById('namaLengkapTunai').value;
+                nikKTP = document.getElementById('nikKTPTunai').value;
+                noPonselPribadi = document.getElementById('noPonselPribadiTunai').value;
+                referensi = document.getElementById('referensiTunai').value || '-';
+                tenor = document.getElementById('tenorTunai').value;
+                
+                const jumlahPinjamRaw = parseInt(document.getElementById('jumlahPinjamTunai').value.replace(/\./g, ''));
+                const jumlahPinjamFormatted = jumlahPinjamRaw.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                
+                // Ambil nilai yang sudah dihitung dan diformat dari span infoBunga
+                bungaPersen = document.getElementById('bungaPersenTunai').textContent;
+                totalPengembalian = document.getElementById('totalPengembalianTunai').textContent;
+                cicilanPerBulan = document.getElementById('cicilanPerBulanTunai').textContent;
+
+            } else if (formType === 'kredit') {
+                tipeTransaksi = "Kredit Elektronik";
+                namaLengkap = document.getElementById('namaLengkapKredit').value;
+                nikKTP = document.getElementById('nikKTPKredit').value;
+                noPonselPribadi = document.getElementById('noPonselPribadiKredit').value;
+                referensi = document.getElementById('referensiKredit').value || '-';
+                tenor = document.getElementById('tenorKredit').value;
+                kategoriElektronik = document.getElementById('kategoriElektronik').value;
+                
+                const hargaBarangRaw = parseInt(document.getElementById('hargaBarangKredit').value.replace(/\./g, ''));
+                const hargaBarangFormatted = hargaBarangRaw.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+
+                // Ambil nilai yang sudah dihitung dan diformat dari span infoBunga
+                bungaPersen = document.getElementById('bungaPersenKredit').textContent;
+                totalPengembalian = document.getElementById('totalPengembalianKredit').textContent;
+                cicilanPerBulan = document.getElementById('cicilanPerBulanKredit').textContent;
+
+            } else if (formType === 'emas') {
+                tipeTransaksi = "Kredit Emas";
+                namaLengkap = document.getElementById('namaLengkapEmas').value;
+                nikKTP = document.getElementById('nikKTPEmas').value;
+                noPonselPribadi = document.getElementById('noPonselPribadiEmas').value;
+                referensi = document.getElementById('referensiEmas').value || '-';
+                tenor = document.getElementById('tenorEmas').value;
+                
+                // Ambil nilai dari input langsung dan format ulang
+                jumlahGramEmas = document.getElementById('jumlahGramEmas').value;
+                hargaEmasPerGram = document.getElementById('hargaEmasPerGram').value; // Ini sudah diformat
+                
+                // Ambil nilai yang sudah dihitung dan diformat dari span infoBunga
+                totalNilaiEmas = document.getElementById('totalNilaiEmas').textContent;
+                bungaPersen = document.getElementById('bungaPersenEmas').textContent;
+                totalPengembalian = document.getElementById('totalPengembalianEmas').textContent;
+                cicilanPerBulan = document.getElementById('cicilanPerBulanEmas').textContent;
+            }
+
+            // Validasi akhir sebelum mengirim ke WhatsApp
+            if (!namaLengkap || !nikKTP || !noPonselPribadi || !tenor) {
+                alert('Data pengajuan belum lengkap. Mohon kembali ke form dan isi data yang diperlukan.');
+                return;
+            }
+
+            const now = new Date();
+            const options = {
+                day: '2-digit', month: '2-digit', year: 'numeric',
+                hour: '2-digit', minute: '2-digit', second: '2-digit',
+                hour12: false
+            };
+            const dateTimeString = now.toLocaleString('id-ID', options);
+
+            let pesan = `╭─⬣「 _✰ Pengajuan ${tipeTransaksi} ✯_ 」
+│
+│ _Data Pemohon:_
+│ 💡 Nama Lengkap: ${namaLengkap}
+│ 🔒 NIK KTP: ${nikKTP}
+│ 📱 No. Ponsel Pribadi: ${noPonselPribadi}
+`;
+            if (referensi && referensi !== '-') { 
+                pesan += `│ 📝 Referensi: ${referensi}\n`;
+            }
+            pesan += `│
+│ _Detail Pengajuan:_
+`;
+            if (formType === 'tunai') {
+                pesan += `│ 💰 Jumlah Pinjaman: ${jumlahPinjamFormatted}\n`; 
+            } else if (formType === 'kredit') {
+                pesan += `│ 📦 Kategori Barang: ${kategoriElektronik}
+│ 💸 Harga Barang: ${hargaBarangFormatted}\n`; 
+            } else if (formType === 'emas') {
+                pesan += `│ ⚖️ Jumlah Gram Emas: ${jumlahGramEmas} gram
+│ 💲 Harga Emas per Gram: ${hargaEmasPerGram}
+│ 🏅 Total Nilai Emas: ${totalNilaiEmas}\n`;
+            }
+
+            pesan += `│ 📆 Tenor: ${tenor} bulan
+│ 📊 Bunga yang berlaku: ${bungaPersen}
+│ 📈 Total Pengembalian: ${totalPengembalian}
+│ 📅 Cicilan per bulan: ${cicilanPerBulan}
+│
+│ Mohon diproses, terima kasih!
+│ _Waktu Pengajuan: ${dateTimeString}_
+╰────────────⬣
+            `.trim();
+
+            const nomorWhatsApp = '6285711374861';
+            const tautanWhatsApp = `https://wa.me/${nomorWhatsApp}?text=${encodeURIComponent(pesan)}`;
+
+            // Membuka tab baru untuk WhatsApp
+            window.open(tautanWhatsApp, '_blank');
+        }
+    </script>
+</body>
+</html>
