@@ -702,15 +702,8 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="jumlahGramEmas">Jumlah Emas (Gram):</label>
-                            <input type="number" id="jumlahGramEmas" name="jumlah_gram" placeholder="Contoh: 5" min="0.1" step="0.1" oninput="hitungBunga('emas')" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="hargaEmasPerGram">Harga Emas per Gram (Rp):</label>
-                            <input type="text" id="hargaEmasPerGram" name="harga_per_gram" placeholder="Contoh: 1.200.000 (Otomatis terisi)" oninput="formatRupiah(this); hitungBunga('emas')" required>
-                            <div id="realtimeGoldPrice" class="realtime-gold-price" style="display:none;">
-                                Harga Emas (Treasury) Terkini: <span id="goldPriceValue">Memuat...</span>
-                            </div>
+                            <label for="hargaEmasPerGram">Harga Emas (Rp):</label>
+                            <input type="text" id="hargaEmasPerGram" name="harga_per_gram" placeholder="Contoh: 10.000.000" oninput="formatRupiah(this); hitungBunga('emas')" required>
                         </div>
                         <div id="infoBungaEmas" class="info-bunga" style="display:none;">
                             <p>Total nilai emas: <span id="totalNilaiEmas"></span></p>
@@ -732,9 +725,8 @@
                             <p>Nomor Ponsel: <strong><span id="summaryNoPonselPribadiEmas"></span></strong></p>
                             <p>Referensi: <strong><span id="summaryReferensiEmas"></span></strong></p>
                             <p>Tenor: <strong><span id="summaryTenorEmas"></span> bulan</strong></p>
-                            <p>Jumlah Gram Emas: <strong><span id="summaryJumlahGramEmas"></span> gram</strong></p>
-                            <p>Harga Emas per Gram: <strong><span id="summaryHargaEmasPerGram"></span></strong></p>
-                            <p>Total Nilai Emas: <strong><span id="summaryTotalNilaiEmas"></span></strong></p>
+                            <p>Harga Emas: <strong><span id="summaryHargaEmasPerGram"></span></strong></p>
+                            <p>Total Nilai Emas: <strong><span id="summaryTotalNilaiEmas"></span></strong></p> 
                             <p>Bunga: <strong><span id="summaryBungaPersenEmas"></span></strong></p>
                             <p>Total Pengembalian: <strong><span id="summaryTotalPengembalianEmas"></span></strong></p>
                             <p>Cicilan Per Bulan: <strong><span id="summaryCicilanPerBulanEmas"></span></strong></p>
@@ -809,7 +801,7 @@
             });
         }
 
-        async function showForm(formId) {
+        function showForm(formId) {
             const mainContentArea = document.getElementById('mainContentArea');
             mainContentArea.classList.add('hidden');
 
@@ -818,14 +810,9 @@
             document.getElementById('kreditEmasWrapper').style.display = 'none';
 
             const targetWrapper = document.getElementById(formId + 'Wrapper');
-            setTimeout(async () => {
+            setTimeout(() => {
                 targetWrapper.style.display = 'block';
-
                 resetFormSteps(formId);
-
-                if (formId === 'kreditEmas') {
-                    await fetchGoldPrice();
-                }
             }, 500);
 
             document.getElementById('infoBungaTunai').style.display = 'none';
@@ -843,6 +830,8 @@
                     step.classList.add('active'); 
                 }
             });
+            // Reset input values as well when resetting steps (optional, but good for user experience)
+            formElement.reset(); // This resets all form inputs within that form
             document.getElementById('infoBungaTunai').style.display = 'none';
             document.getElementById('infoBungaKredit').style.display = 'none';
             document.getElementById('infoBungaEmas').style.display = 'none';
@@ -899,15 +888,18 @@
             let prevStepElement;
             if (currentStepNumber === 'summary') {
                 const steps = Array.from(formElement.querySelectorAll('.form-step:not([data-step="summary"])'));
-                prevStepElement = steps[steps.length - 1];
+                prevStepElement = steps[steps.length - 1]; // Go back to the last data input step before summary
             } else {
                 prevStepElement = formElement.querySelector(`.form-step[data-step="${currentStepNumber - 1}"]`);
             }
 
             if (prevStepElement) {
                 prevStepElement.classList.add('active');
-                if (currentStepNumber === 4) { 
-                    document.getElementById(`infoBunga${formId.substring(4)}`).style.display = 'none';
+                if (currentStepNumber === 4 || currentStepNumber === 'summary') { // If coming from step 4 or summary
+                    // Re-display the infoBunga div if applicable
+                    if (formId === 'formTunai') document.getElementById('infoBungaTunai').style.display = 'block';
+                    if (formId === 'formKredit') document.getElementById('infoBungaKredit').style.display = 'block';
+                    if (formId === 'formEmas') document.getElementById('infoBungaEmas').style.display = 'block';
                 }
             } else {
                 console.warn("No previous step found. This should be handled by not showing 'Previous' button on first step.");
@@ -972,22 +964,20 @@
                 document.getElementById('summaryNoPonselPribadiEmas').textContent = document.getElementById('noPonselPribadiEmas').value;
                 document.getElementById('summaryReferensiEmas').textContent = document.getElementById('referensiEmas').value || '-';
                 document.getElementById('summaryTenorEmas').textContent = document.getElementById('tenorEmas').value;
-                document.getElementById('summaryJumlahGramEmas').textContent = document.getElementById('jumlahGramEmas').value;
                 document.getElementById('summaryHargaEmasPerGram').textContent = document.getElementById('hargaEmasPerGram').value; // Ini sudah diformat
                 
                 // Ambil nilai yang sudah dihitung dan diformat dari span infoBunga
-                totalNilaiEmas = document.getElementById('totalNilaiEmas').textContent;
-                bungaPersen = document.getElementById('bungaPersenEmas').textContent;
-                totalPengembalian = document.getElementById('totalPengembalianEmas').textContent;
-                cicilanPerBulan = document.getElementById('cicilanPerBulanEmas').textContent;
-                
-                document.getElementById('summaryTotalNilaiEmas').textContent = totalNilaiEmas;
-                document.getElementById('summaryBungaPersenEmas').textContent = bungaPersen;
-                document.getElementById('summaryTotalPengembalianEmas').textContent = totalPengembalian;
-                document.getElementById('summaryCicilanPerBulanEmas').textContent = cicilanPerBulan;
+                document.getElementById('summaryTotalNilaiEmas').textContent = document.getElementById('totalNilaiEmas').textContent;
+                document.getElementById('summaryBungaPersenEmas').textContent = document.getElementById('bungaPersenEmas').textContent;
+                document.getElementById('summaryTotalPengembalianEmas').textContent = document.getElementById('totalPengembalianEmas').textContent;
+                document.getElementById('summaryCicilanPerBulanEmas').textContent = document.getElementById('cicilanPerBulanEmas').textContent;
             }
 
             formElement.querySelector(`.form-step[data-step="summary"]`).classList.add('active');
+            // Hide the infoBunga div when moving to summary
+            if (formType === 'tunai') document.getElementById('infoBungaTunai').style.display = 'none';
+            if (formType === 'kredit') document.getElementById('infoBungaKredit').style.display = 'none';
+            if (formType === 'emas') document.getElementById('infoBungaEmas').style.display = 'none';
         }
 
         function formatRupiah(input) {
@@ -996,45 +986,6 @@
                 input.value = new Intl.NumberFormat('id-ID').format(Number(value));
             } else {
                 input.value = '';
-            }
-        }
-
-        async function fetchGoldPrice() {
-            const goldPriceValueSpan = document.getElementById('goldPriceValue');
-            const realtimeGoldPriceDiv = document.getElementById('realtimeGoldPrice');
-            const hargaEmasPerGramInput = document.getElementById('hargaEmasPerGram');
-
-            realtimeGoldPriceDiv.style.display = 'block';
-            goldPriceValueSpan.textContent = 'Memuat...';
-            hargaEmasPerGramInput.value = '';
-
-            try {
-                const response = await fetch('https://api.digimart.id/gold-prices');
-                const data = await response.json();
-
-                let goldPrice = null;
-                const treasuryGold = data.find(item => item.source === 'Treasury');
-                const antamGold = data.find(item => item.source === 'Antam');
-
-                if (treasuryGold && treasuryGold.buy_price) {
-                    goldPrice = treasuryGold.buy_price;
-                    goldPriceValueSpan.textContent = `Rp ${new Intl.NumberFormat('id-ID').format(goldPrice)}`;
-                    hargaEmasPerGramInput.value = new Intl.NumberFormat('id-ID').format(goldPrice);
-                } else if (antamGold && antamGold.buy_price) {
-                     goldPrice = antamGold.buy_price;
-                     goldPriceValueSpan.textContent = `Rp ${new Intl.NumberFormat('id-ID').format(goldPrice)} (Antam)`;
-                     hargaEmasPerGramInput.value = new Intl.NumberFormat('id-ID').format(goldPrice);
-                } else {
-                    goldPriceValueSpan.textContent = 'Data tidak ditemukan.';
-                    hargaEmasPerGramInput.value = '';
-                }
-                
-                hitungBunga('emas');
-
-            } catch (error) {
-                console.error('Error fetching gold price:', error);
-                goldPriceValueSpan.textContent = 'Gagal memuat harga. Silakan masukkan manual.';
-                hargaEmasPerGramInput.placeholder = 'Contoh: 1.200.000 (Masukkan Manual)';
             }
         }
 
@@ -1061,10 +1012,9 @@
                 infoBungaDiv = document.getElementById('infoBungaKredit');
             } else if (formType === 'emas') {
                 tenorInput = document.getElementById('tenorEmas');
-                const jumlahGramEmas = parseFloat(document.getElementById('jumlahGramEmas').value);
                 const hargaEmasPerGramField = document.getElementById('hargaEmasPerGram');
                 // Pastikan nilai sudah bersih dari format rupiah sebelum parseInt
-                const hargaEmasPerGram = parseInt(hargaEmasPerGramField.value.replace(/\./g, ''));
+                principalAmount = parseInt(hargaEmasPerGramField.value.replace(/\./g, ''));
 
                 bungaPersenSpan = document.getElementById('bungaPersenEmas');
                 totalPengembalianSpan = document.getElementById('totalPengembalianEmas');
@@ -1072,11 +1022,10 @@
                 infoBungaDiv = document.getElementById('infoBungaEmas');
                 const totalNilaiEmasSpan = document.getElementById('totalNilaiEmas');
 
-                if (isNaN(jumlahGramEmas) || isNaN(hargaEmasPerGram) || jumlahGramEmas <= 0 || hargaEmasPerGram <= 0) {
+                if (isNaN(principalAmount) || principalAmount <= 0) {
                     infoBungaDiv.style.display = 'none';
                     return;
                 }
-                principalAmount = jumlahGramEmas * hargaEmasPerGram;
                 totalNilaiEmasSpan.textContent = principalAmount.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
             }
 
@@ -1105,7 +1054,7 @@
         }
 
         function kirimKeWhatsApp(formType) {
-            let namaLengkap, nikKTP, noPonselPribadi, tenor, tipeTransaksi, bungaPersen, totalPengembalian, cicilanPerBulan, kategoriElektronik, jumlahGramEmas, hargaEmasPerGram, totalNilaiEmas, referensi;
+            let namaLengkap, nikKTP, noPonselPribadi, tenor, tipeTransaksi, bungaPersen, totalPengembalian, cicilanPerBulan, kategoriElektronik, hargaBarangFormatted, hargaEmasPerGram, totalNilaiEmas, referensi;
 
             // Dapatkan nilai dari elemen input langsung
             if (formType === 'tunai') {
@@ -1117,7 +1066,7 @@
                 tenor = document.getElementById('tenorTunai').value;
                 
                 const jumlahPinjamRaw = parseInt(document.getElementById('jumlahPinjamTunai').value.replace(/\./g, ''));
-                const jumlahPinjamFormatted = jumlahPinjamRaw.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                hargaBarangFormatted = jumlahPinjamRaw.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
                 
                 // Ambil nilai yang sudah dihitung dan diformat dari span infoBunga
                 bungaPersen = document.getElementById('bungaPersenTunai').textContent;
@@ -1134,7 +1083,7 @@
                 kategoriElektronik = document.getElementById('kategoriElektronik').value;
                 
                 const hargaBarangRaw = parseInt(document.getElementById('hargaBarangKredit').value.replace(/\./g, ''));
-                const hargaBarangFormatted = hargaBarangRaw.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                hargaBarangFormatted = hargaBarangRaw.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
 
                 // Ambil nilai yang sudah dihitung dan diformat dari span infoBunga
                 bungaPersen = document.getElementById('bungaPersenKredit').textContent;
@@ -1150,7 +1099,6 @@
                 tenor = document.getElementById('tenorEmas').value;
                 
                 // Ambil nilai dari input langsung dan format ulang
-                jumlahGramEmas = document.getElementById('jumlahGramEmas').value;
                 hargaEmasPerGram = document.getElementById('hargaEmasPerGram').value; // Ini sudah diformat
                 
                 // Ambil nilai yang sudah dihitung dan diformat dari span infoBunga
@@ -1188,13 +1136,12 @@
 │ _Detail Pengajuan:_
 `;
             if (formType === 'tunai') {
-                pesan += `│ 💰 Jumlah Pinjaman: ${jumlahPinjamFormatted}\n`; 
+                pesan += `│ 💰 Jumlah Pinjaman: ${hargaBarangFormatted}\n`; 
             } else if (formType === 'kredit') {
                 pesan += `│ 📦 Kategori Barang: ${kategoriElektronik}
 │ 💸 Harga Barang: ${hargaBarangFormatted}\n`; 
             } else if (formType === 'emas') {
-                pesan += `│ ⚖️ Jumlah Gram Emas: ${jumlahGramEmas} gram
-│ 💲 Harga Emas per Gram: ${hargaEmasPerGram}
+                pesan += `│ 💲 Harga Emas: ${hargaEmasPerGram}
 │ 🏅 Total Nilai Emas: ${totalNilaiEmas}\n`;
             }
 
@@ -1208,7 +1155,7 @@
 ╰────────────⬣
             `.trim();
 
-            const nomorWhatsApp = '6285711374861';
+            const nomorWhatsApp = '6281298783804';
             const tautanWhatsApp = `https://wa.me/${nomorWhatsApp}?text=${encodeURIComponent(pesan)}`;
 
             // Membuka tab baru untuk WhatsApp
